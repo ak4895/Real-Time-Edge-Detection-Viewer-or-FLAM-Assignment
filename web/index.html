@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html><!DOCTYPE html><html><head><title>Edge Viewer</title><style>body{margin:0;background:#1a1a2e;color:#fff;font-family:Arial;display:flex;flex-direction:column;align-items:center;padding:20px}canvas{border:2px solid #00d4ff;margin:20px}button{padding:10px 20px;margin:10px;background:#00d4ff;border:none;border-radius:5px;cursor:pointer}</style></head><body><h1>Edge Detection Viewer</h1><div><button id="loadSampleBtn">Load Sample</button><button id="captureBtn">Use Webcam</button><input type="file" id="imageUpload" accept="image/*"></div><canvas id="viewerCanvas" width="640" height="480"></canvas><div id="stats" style="font-family:monospace">FPS: <span id="fps">0</span> | Resolution: <span id="res">640x480</span></div><script type="module" src="dist/main.js"></script></body></html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Edge Detection Viewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        h1 {
+            margin: 20px 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 8px rgba(0, 212, 255, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .controls {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.5);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        input[type="file"] {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(0, 212, 255, 0.5);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: linear-gradient(135deg, #ee5a6f, #c44569);
+        }
+        
+        .viewer-container {
+            position: relative;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.4);
+            border-radius: 15px;
+            overflow: hidden;
+            background: #000;
+            border: 3px solid #00d4ff;
+        }
+        
+        canvas {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        #stats {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #00d4ff;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .stat {
+            display: inline-block;
+            margin: 0 20px;
+            font-size: 16px;
+        }
+
+        .stat .label {
+            color: #00d4ff;
+            font-weight: bold;
+        }
+
+        .stat .value {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            font-size: 14px;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.8;
+        }
+
+        .feature-badge {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin: 2px;
+            border: 1px solid rgba(0, 212, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Real-Time Edge Detection Viewer</h1>
+    
+    <div class="controls">
+        <button id="loadSampleBtn">📁 Load Sample Image</button>
+        <button id="captureBtn">📷 Use Webcam (Live)</button>
+        <input type="file" id="imageUpload" accept="image/*" title="Upload any image for edge detection">
+    </div>
+
+    <div class="viewer-container">
+        <canvas id="viewerCanvas" width="640" height="480"></canvas>
+    </div>
+
+    <div id="stats">
+        <div class="stat">
+            <span class="label">FPS:</span>
+            <span class="value" id="fps">0</span>
+        </div>
+        <div class="stat">
+            <span class="label">Resolution:</span>
+            <span class="value" id="res">640 x 480</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>Features:</strong></p>
+        <span class="feature-badge">✨ TypeScript</span>
+        <span class="feature-badge">📹 Live Webcam</span>
+        <span class="feature-badge">🖼️ Image Upload</span>
+        <span class="feature-badge">⚡ 60 FPS</span>
+        <span class="feature-badge">🎨 Sobel Edge Detection</span>
+        <p style="margin-top: 10px; font-size: 12px;">
+            Press F12 to open DevTools and see console logs
+        </p>
+    </div>
+    
+    <script src="dist/main.js"></script>
+</body>
+</html>

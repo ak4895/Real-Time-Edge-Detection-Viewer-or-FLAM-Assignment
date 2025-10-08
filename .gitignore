@@ -1,0 +1,63 @@
+# Android
+*.iml
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+
+# Android Studio
+.idea/
+*.iws
+*.ipr
+out/
+.navigation/
+captures/
+
+# Gradle
+.gradle/
+build/
+gradle-app.setting
+!gradle-wrapper.jar
+
+# NDK
+obj/
+.externalNativeBuild/
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google Services
+google-services.json
+
+# Log Files
+*.log
+
+# Web
+web/node_modules/
+web/dist/*.map
+web/package-lock.json
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+*.swp
+*.swo
+*~
+
+# Lint
+lint/
+*.hprof

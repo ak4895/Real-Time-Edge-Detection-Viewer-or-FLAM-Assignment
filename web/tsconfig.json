@@ -1,0 +1,10 @@
+﻿{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "none",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "sourceMap": false,
+    "removeComments": true
+  }
+}

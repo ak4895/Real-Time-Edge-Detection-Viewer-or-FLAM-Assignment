@@ -1,0 +1,16 @@
+{
+  "name": "edge-detection-viewer",
+  "version": "1.0.0",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "keywords": ["edge-detection", "typescript", "canvas"],
+  "author": "",
+  "license": "ISC",
+  "description": "Real-time edge detection viewer with webcam support",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
